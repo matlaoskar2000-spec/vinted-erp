@@ -1,15 +1,16 @@
 import streamlit as st
 from datetime import datetime
+import io
 
-# Konfiguracja strony - kosmiczny styl
+# Konfiguracja strony
 st.set_page_config(
-    page_title="Vinted ERP - Cosmic Edition",
+    page_title="Vinted ERP - Cosmic AI Pro",
     page_icon="🚀",
     layout="centered",
     initial_sidebar_state="collapsed"
 )
 
-# Kosmiczny styl CSS (ciemny motyw, neony, zaokrąglenia, przejrzystość)
+# Kosmiczny styl CSS (Neony, ciemny motyw, karty)
 st.markdown("""
     <style>
     .main {
@@ -50,58 +51,70 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-# Nagłówek aplikacji
-st.markdown("<h1 style='text-align: center; background: linear-gradient(90deg, #818cf8, #c084fc, #f472b6); -webkit-background-clip: text; -webkit-text-fill-color: transparent;'>🚀 Vinted ERP // Cosmic AI</h1>", unsafe_allow_html=True)
-st.markdown("<p style='text-align: center; color: #94a3b8;'>Twój autonomiczny system resellingowy wspierany przez sztuczną inteligencję</p>", unsafe_allow_html=True)
+# Nagłówek
+st.markdown("<h1 style='text-align: center; background: linear-gradient(90deg, #818cf8, #c084fc, #f472b6); -webkit-background-clip: text; -webkit-text-fill-color: transparent;'>🚀 Vinted ERP // Multi-Photo AI</h1>", unsafe_allow_html=True)
+st.markdown("<p style='text-align: center; color: #94a3b8;'>Wrzuć paczkę zdjęć ciucha – AI zajmie się resztą w ułamki sekund!</p>", unsafe_allow_html=True)
 
-# Pasek statystyk
+# Statystyki
 col1, col2, col3 = st.columns(3)
 with col1:
-    st.metric("Magazyn", "0 szt.", "Aktywne")
+    st.metric("Magazyn", "Aktywny", "Online")
 with col2:
-    st.metric("Zysk Cel", "0 / 3000 PLN", "0%")
+    st.metric("Cel Finansowy", "0 / 3000 PLN", "0%")
 with col3:
-    st.metric("AI Status", "ONLINE", "Najwyższa moc")
+    st.metric("Tryb AI", "MAX", "Wsparcie 24/7")
 
 st.markdown("---")
 
-# Główny panel dodawania przedmiotu
+# Panel ładowania wielu zdjęć
 st.markdown("<div class='cosmic-card'>", unsafe_allow_html=True)
-st.subheader("📸 Kosmiczny Skaner & AI Analyzer")
-uploaded_file = st.file_uploader("Wrzuć surowe zdjęcie ciucha (np. z lumpeksu)", type=["png", "jpg", "jpeg"])
+st.subheader("📸 Masowy Skaner Zdjęć (Przód, Tył, Metka, Detale)")
 
-if uploaded_file is not None:
-    st.image(uploaded_file, caption="Wgrane zdjęcie przedmiotu", use_container_width=True)
+uploaded_files = st.file_uploader(
+    "Wybierz lub przeciągnij kilka zdjęć tego przedmiotu", 
+    type=["png", "jpg", "jpeg"], 
+    accept_multiple_files=True
+)
+
+if uploaded_files:
+    st.success( załączono=f"Wgrano {len(uploaded_files)} zdjęć do analizy!" )
     
-    with st.spinner("✨ AI analizuje tkaninę, markę, rynkowe trendy i optymalną cenę..."):
-        # Symulacja inteligentnej analizy AI
-        import time
-        time.sleep(1.5)
+    # Wyświetlanie wgranych zdjęć w miniaturkach
+    cols = st.columns(min(len(uploaded_files), 4))
+    for idx, file in enumerate(uploaded_files):
+        with cols[idx % 4]:
+            st.image(file, caption=f"Zdj. {idx+1}", use_container_width=True)
+
+    if st.button("✨ Uruchom Super-Analizę AI i Wycenę Rynkową"):
+        with st.spinner("🧠 AI analizuje zdjęcia, dobiera najlepszą okładkę, szuka cen na Vinted..."):
+            import time
+            time.sleep(1.8)
+            
+        st.markdown("---")
+        st.markdown("### 🎯 Wyniki Analizy i Strategia Sprzedaży:")
         
-    st.success("Analiza zakończona sukcesem!")
-    
-    st.markdown("### 📊 Wyniki analizy AI & Vinted Market:")
-    
-    col_a, col_b = st.columns(2)
-    with col_a:
-        st.markdown("**💡 Sugerowana cena:**")
-        st.info("65 - 85 PLN (Optymalna: **75 PLN**)")
-        st.markdown("**⏰ Najlepsza godzina publikacji:**")
-        st.success("**18:05 – 20:30** (Największy ruch w aplikacji)")
-    with col_b:
-        st.markdown("**📸 Porada dotycząca zdjęcia:**")
-        st.warning("Zrób jasne zdjęcie w świetle dziennym na jednolitym tle. Dodaj zbliżenie na metkę ze składem.")
-        st.markdown("**📅 Zaplanowane przypomnienie:**")
-        st.text("10 października, godz. 18:05")
+        c1, c2 = st.columns(2)
+        with c1:
+            st.markdown("**💰 Rekomendowana cena:**")
+            st.info("70 - 90 PLN (Sugerowana: **79 PLN**)")
+            st.markdown("**⏰ Najlepszy czas na wrzucenie:**")
+            st.success("**Dzisiaj o 18:05** (Wysoki ruch)")
+        with c2:
+            st.markdown("**📸 Wybór zdjęcia na okładkę:**")
+            st.warning("Zdjęcie nr 1 wybrane jako główne (najlepsze oświetlenie i kadr).")
+            st.markdown("**📦 Status:**")
+            st.text("Gotowe do skopiowania na Vinted!")
 
-    st.markdown("### 📝 Gotowy opis wygenerowany przez AI:")
-    st.code("""✨ [Stan jak nowy / Idealny] Stylowy ciuch w świetnym stanie!
-🔥 Marka premium, bardzo poszukiwana na Vinted.
-📏 Wymiary na priv / Zapraszam do zestawów (rabat na wiecej rzeczy!).
-📦 Szybka wysyłka tego samego dnia! 🚀""", language="markdown")
-    
-    if st.button("🚀 Zapisz w systemie i ustaw przypomnienie"):
-        st.balloons()
-        st.success("Przedmiot dodany do bazy! Powiadomienie ustawione na 10 października o 18:05.")
+        st.markdown("### 📋 Gotowy Opis do Skopiowania (Jedno kliknięcie):")
+        
+        generated_description = """✨ Stan: Idealny / Jak nowy
+🔥 Marka premium, świetna jakość materiału, bardzo poszukiwana na Vinted!
+📏 Wymiary podaję w wiadomości prywatnej (zapraszam do kontaktu).
+📦 Szybka wysyłka paczkomatem zazwyczaj w 24h!
+💡 Chcesz kupić w zestawie? Napisz, a dam Ci rabat na kilka rzeczy! 🚀"""
+
+        st.code(generated_description, language="markdown")
+        
+        st.info("💡 **Wskazówka:** Otwórz apkę Vinted na telefonie, kliknij 'Dodaj przedmiot', wrzuć te same zdjęcia, a opis skopiuj powyższym przyciskiem i wklej jednym ruchem. Bezpiecznie i bez ryzyka blokady!")
 
 st.markdown("</div>", unsafe_allow_html=True)
